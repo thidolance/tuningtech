@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TT Monitor | Monitoramento de Dados, Host, Backup e Auditoria — Tuning Tech</title>
+<title>TT Monitor | Monitoramento de Dados, Host, Backup e Auditoria · Tuning Tech</title>
 <meta name="description" content="TT Monitor: monitore banco de dados, host, versionamento de configuração, DDL de tabelas e backup em um único lugar. Alertas configuráveis por serviço e servidor, de onde estiver.">
 <link rel="icon" href="assets/icon-rocket.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -176,7 +176,7 @@
 
   /* DB logos strip */
   .db-strip{display:grid;gap:16px;grid-template-columns:1fr;align-items:center;justify-items:center}
-  .db-strip img{height:52px;width:auto;opacity:0.92;transition:opacity .2s ease, transform .2s ease}
+  .db-strip img{height:84px;width:auto;opacity:0.95;transition:opacity .2s ease, transform .2s ease}
   .db-strip img:hover{opacity:1;transform:translateY(-3px)}
 
   /* CTA final */
@@ -251,7 +251,7 @@
     <div class="wrap">
       <span class="badge">🛰️ TT Monitor · Produto Tuning Tech</span>
       <h1>Todo o seu ambiente de dados. <span class="grad">Em um único lugar.</span></h1>
-      <p class="sub">O TT Monitor acompanha seu banco de dados, seu host, o versionamento das configurações, o DDL das tabelas e até o seu backup — tudo numa só plataforma, 24 horas por dia.</p>
+      <p class="sub">O TT Monitor acompanha seu banco de dados, seu host, o versionamento das configurações, o DDL das tabelas e até o seu backup, tudo numa só plataforma, 24 horas por dia.</p>
       <div class="ctas">
         <a href="index.html#contato" class="btn btn-primary">Falar com um Especialista</a>
         <a href="#monitora" class="btn btn-ghost">Ver o que ele monitora</a>
@@ -301,7 +301,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13l2 2 4-4"/></svg>
           </div>
           <h3>Configuração & DDL (auditoria)</h3>
-          <p>Cada alteração fica registrada e versionada — você sabe o que mudou, quando e por quem.</p>
+          <p>Cada alteração fica registrada e versionada. Você sabe o que mudou, quando e por quem.</p>
           <ul>
             <li>Versionamento de arquivos de configuração (my.cnf e afins)</li>
             <li>Histórico de ajuste de variáveis</li>
@@ -335,7 +335,7 @@
         <div class="content">
           <span class="pillar-tag">Mobilidade</span>
           <h2>Monitore de onde estiver</h2>
-          <p>O ambiente não para quando você sai da mesa — e o TT Monitor também não. Acompanhe tudo pelo computador no escritório ou pelo celular no caminho de casa, com a mesma visão em tempo real.</p>
+          <p>O ambiente não para quando você sai da mesa, e o TT Monitor também não. Acompanhe tudo pelo computador no escritório ou pelo celular no caminho de casa, com a mesma visão em tempo real.</p>
           <ul class="feature-check">
             <li>✓ Painel completo no desktop</li>
             <li>✓ Acesso pelo celular, otimizado para a tela pequena</li>
@@ -397,12 +397,12 @@
         <div class="visual">
           <div class="card">
             <div class="mini-row" style="margin-bottom:10px">
-              <div class="mock-stat"><div class="label">Disco /var</div><div class="value alert">92%</div></div>
+              <div class="mock-stat"><div class="label">Disco /postgres</div><div class="value alert">92%</div></div>
               <div class="mock-stat"><div class="label">Replicação</div><div class="value ok">OK</div></div>
             </div>
             <div class="mock-stat" style="margin-bottom:0">
               <div class="label">Regra ativa</div>
-              <div class="value" style="font-size:14px">Disco &gt; 90% → alerta crítico → Slack + SMS</div>
+              <div class="value" style="font-size:14px">Disco &gt; limite configurado → alerta crítico → Slack + SMS</div>
             </div>
           </div>
         </div>
@@ -415,21 +415,37 @@
     <div class="wrap">
       <span class="eyebrow">Nada cai no esquecimento</span>
       <h2 class="section-title">O alerta fica vivo até o incidente ser resolvido</h2>
-      <p class="section-lede">Notificação não é o fim da história. No TT Monitor, o alerta permanece ativo no painel — visível e cobrando ação — até que alguém resolva de fato o incidente.</p>
+      <p class="section-lede">Notificação não é o fim da história. No TT Monitor, o alerta permanece ativo no painel, visível e cobrando ação, até que alguém resolva de fato o incidente.</p>
       <div class="alert-panel">
         <div class="alert-row">
           <div class="pulse-dot"></div>
           <div class="txt">
-            <div class="t">Uso de disco em /var acima de 90%</div>
-            <div class="s">Servidor db-prod-01 · aberto há 6 min · notificado em Slack e SMS</div>
+            <div class="t">Uso de CPU acima do limite configurado</div>
+            <div class="s">Servidor db-prod-01 · aberto há 8 min · notificado em Slack e SMS</div>
           </div>
           <div class="state open">Em aberto</div>
         </div>
         <div class="alert-row">
           <div class="pulse-dot"></div>
           <div class="txt">
-            <div class="t">Conexões acima do limiar configurado</div>
-            <div class="s">Serviço MySQL · aberto há 2 min · aguardando ação</div>
+            <div class="t">Uso de memória acima do limite configurado</div>
+            <div class="s">Servidor db-prod-01 · aberto há 5 min · aguardando ação</div>
+          </div>
+          <div class="state open">Em aberto</div>
+        </div>
+        <div class="alert-row">
+          <div class="pulse-dot"></div>
+          <div class="txt">
+            <div class="t">Uso de disco em /postgres acima do limite configurado</div>
+            <div class="s">Servidor db-prod-01 · aberto há 3 min · notificado em Slack e SMS</div>
+          </div>
+          <div class="state open">Em aberto</div>
+        </div>
+        <div class="alert-row">
+          <div class="pulse-dot"></div>
+          <div class="txt">
+            <div class="t">Conexões acima do limite configurado</div>
+            <div class="s">Serviço PostgreSQL · aberto há 2 min · aguardando ação</div>
           </div>
           <div class="state open">Em aberto</div>
         </div>
@@ -467,7 +483,7 @@
       <div class="cta-final">
         <img src="assets/icon-rocket.png" alt="" style="width:64px;margin:0 auto 24px">
         <h2>Coloque o ambiente inteiro sob os olhos do TT Monitor.</h2>
-        <p>Banco, host, configuração, DDL e backup em uma única tela — com alertas que não deixam nada passar. Comece com um diagnóstico gratuito do seu ambiente.</p>
+        <p>Banco, host, configuração, DDL e backup em uma única tela, com alertas que não deixam nada passar. Comece com um diagnóstico gratuito do seu ambiente.</p>
         <a href="index.html#contato" class="btn btn-primary">Solicitar Diagnóstico Gratuito</a>
       </div>
     </div>

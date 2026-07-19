@@ -205,6 +205,28 @@
     .db-strip{grid-template-columns:repeat(5,1fr)}
     .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
   }
+
+  @media(max-width:719px){
+    section{padding:44px 0}
+    .pillar{padding:44px 0}
+    .hero{padding:36px 0 28px}
+    .section-lede{margin-bottom:28px}
+    nav .logo .tag{display:none}
+    nav .logo img{height:22px}
+    .monitor-grid{gap:14px}
+    .mcard{padding:22px}
+    /* logos: linha compacta que quebra, centralizada e menores */
+    .db-strip{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:26px 30px}
+    .db-strip img{height:40px}
+    /* celular flutuante some no mobile; desktop ocupa a largura */
+    .device-mobile{display:none}
+    .device-desktop{max-width:100%}
+    /* cards de alerta: dot e badge alinhados ao topo, título menor */
+    .alert-row{align-items:flex-start}
+    .alert-row .pulse-dot{margin-top:6px}
+    .alert-row .state{margin-top:2px}
+    .alert-row .txt .t{font-size:13.5px}
+  }
 </style>
 </head>
 <body>

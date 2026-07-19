@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tuning Tech | Monitoramento e Consultoria de Bancos de Dados</title>
+<meta name="description" content="Monitoramento, backup e sustentação para MySQL, PostgreSQL, MongoDB e Percona Server. Consultoria especializada + plataforma própria de monitoramento.">
+<link rel="icon" href="assets/icon-rocket.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #060510;
+    --bg-alt: #0b0818;
+    --card: rgba(255,255,255,0.04);
+    --card-border: rgba(168,85,247,0.22);
+    --ink: #f5f3ff;
+    --ink-muted: #b9b0d8;
+    --ink-faint: #857ba3;
+    --pink: #e879f9;
+    --purple: #a855f7;
+    --purple-deep: #6d28d9;
+    --purple-darker: #3b1470;
+    --gradient: linear-gradient(90deg, var(--pink), var(--purple) 55%, var(--purple-deep));
+    --radius: 16px;
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);
+    color:var(--ink-muted);
+    font-family:'Inter',system-ui,-apple-system,sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,h4{
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    color:var(--ink);
+    line-height:1.15;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  ul{list-style:none}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 20px}
+  section{position:relative;padding:72px 0}
+  .eyebrow{
+    display:inline-block;
+    font-size:12px;
+    font-weight:600;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--pink);
+    margin-bottom:14px;
+  }
+  .section-title{font-size:clamp(26px,5vw,38px);margin-bottom:14px}
+  .section-lede{color:var(--ink-muted);font-size:16px;max-width:640px;margin-bottom:40px}
+  .center{text-align:center;margin-left:auto;margin-right:auto}
+
+  /* ---------- Starfield / galaxy backdrop ---------- */
+  .stars{
+    position:fixed;inset:-10% ;z-index:-3;
+    background:var(--bg);
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 30%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 75% 15%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 50% 60%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 90% 80%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 10% 85%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 35% 45%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 65% 90%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 5% 55%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 85% 40%, #fff 100%, transparent);
+    background-repeat:repeat;
+    background-size:600px 600px;
+    opacity:0.5;
+    animation:starsDrift 180s linear infinite;
+  }
+  .stars.layer2{
+    z-index:-2;background:transparent;
+    background-image:
+      radial-gradient(1px 1px at 15% 65%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 45% 20%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 60% 75%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 80% 35%, #fff 100%, transparent),
+      radial-gradient(1px 1px at 95% 60%, #fff 100%, transparent),
+      radial-gradient(1.5px 1.5px at 30% 90%, #fff 100%, transparent);
+    background-size:480px 480px;
+    opacity:0.35;
+    animation:starsDrift 110s linear infinite reverse;
+  }
+  @keyframes starsDrift{
+    from{background-position:0 0}
+    to{background-position:-600px 600px}
+  }
+  .twinkle-layer{position:fixed;inset:0;z-index:-2;pointer-events:none;overflow:hidden}
+  .twinkle{position:absolute;border-radius:50%;background:#fff;animation:twinkle ease-in-out infinite}
+  @keyframes twinkle{
+    0%,100%{opacity:0.15;transform:scale(0.8)}
+    50%{opacity:1;transform:scale(1.4)}
+  }
+  .shooting-stars{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+  .shooting-star{
+    position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;
+    box-shadow:0 0 6px 1px rgba(255,255,255,0.9);
+    opacity:0;
+    animation:shoot linear infinite;
+  }
+  .shooting-star::before{
+    content:'';position:absolute;top:50%;right:0;width:120px;height:1px;
+    background:linear-gradient(90deg, rgba(255,255,255,0.85), transparent);
+    transform:translateY(-50%);
+  }
+  .shooting-star.s1{top:12%;left:80%;animation-duration:7s;animation-delay:1s}
+  .shooting-star.s2{top:32%;left:60%;animation-duration:11s;animation-delay:4s}
+  .shooting-star.s3{top:6%;left:45%;animation-duration:9s;animation-delay:7.5s}
+  @keyframes shoot{
+    0%{transform:translate(0,0) rotate(-40deg);opacity:0}
+    2%{opacity:1}
+    12%{transform:translate(-320px,260px) rotate(-40deg);opacity:0}
+    100%{transform:translate(-320px,260px) rotate(-40deg);opacity:0}
+  }
+  .nebula{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+  .blob{
+    position:absolute;border-radius:50%;
+    filter:blur(90px);opacity:0.35;
+    animation:drift 26s ease-in-out infinite alternate;
+  }
+  .blob.b1{width:520px;height:520px;background:var(--purple-deep);top:-120px;left:-100px}
+  .blob.b2{width:460px;height:460px;background:var(--pink);top:40%;right:-160px;animation-delay:-8s}
+  .blob.b3{width:420px;height:420px;background:var(--purple);bottom:-140px;left:20%;animation-delay:-15s}
+  @keyframes drift{
+    from{transform:translate(0,0) scale(1)}
+    to{transform:translate(40px,-30px) scale(1.1)}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stars,.stars.layer2,.blob,.shooting-star,.twinkle{animation:none}
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(6,5,16,0.72);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid rgba(168,85,247,0.15);
+  }
+  nav{
+    max-width:var(--maxw);margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;justify-content:space-between;gap:16px;
+  }
+  nav .logo img{height:26px;width:auto}
+  nav .links{display:none;gap:28px;align-items:center;font-size:14px;font-weight:500;color:var(--ink-muted)}
+  nav .links a:hover{color:var(--ink)}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    padding:12px 22px;border-radius:999px;
+    font-weight:600;font-size:14px;
+    border:1px solid transparent;cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    white-space:nowrap;
+  }
+  /* Neon Button (inspired by 21st.dev's neon-button component, adapted to plain CSS) */
+  .btn-primary{
+    position:relative;color:var(--ink);
+    background:
+      linear-gradient(var(--bg), var(--bg)) padding-box,
+      var(--gradient) border-box;
+    border:1.5px solid transparent;
+    box-shadow:
+      0 0 10px rgba(232,121,249,0.35),
+      0 0 22px rgba(168,85,247,0.25);
+    animation:neonPulse 2.6s ease-in-out infinite;
+  }
+  .btn-primary:hover{
+    transform:translateY(-2px);
+    animation-play-state:paused;
+    box-shadow:
+      0 0 18px rgba(232,121,249,0.85),
+      0 0 40px rgba(168,85,247,0.6),
+      0 0 60px rgba(109,40,217,0.4);
+  }
+  @keyframes neonPulse{
+    0%,100%{box-shadow:0 0 10px rgba(232,121,249,0.35), 0 0 22px rgba(168,85,247,0.25)}
+    50%{box-shadow:0 0 15px rgba(232,121,249,0.55), 0 0 32px rgba(168,85,247,0.4)}
+  }
+  .btn-ghost{
+    background:transparent;border-color:rgba(168,85,247,0.4);color:var(--ink);
+  }
+  .btn-ghost:hover{border-color:var(--purple);background:rgba(168,85,247,0.08)}
+  .btn-block{width:100%}
+  nav .btn{padding:10px 18px;font-size:13px}
+  .navtoggle{display:flex;flex-direction:column;gap:4px;background:none;border:none;cursor:pointer;padding:6px}
+  .navtoggle span{width:20px;height:2px;background:var(--ink)}
+  .mobile-links{
+    display:none;flex-direction:column;gap:2px;
+    background:var(--bg-alt);border-top:1px solid rgba(168,85,247,0.15);
+  }
+  .mobile-links.open{display:flex}
+  .mobile-links a{padding:14px 20px;font-size:15px;color:var(--ink-muted);border-bottom:1px solid rgba(255,255,255,0.04)}
+
+  /* ---------- Hero ---------- */
+  .hero{padding:64px 0 56px;text-align:center}
+  .hero .badge{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--card);border:1px solid var(--card-border);
+    padding:7px 16px;border-radius:999px;font-size:13px;color:var(--ink-muted);
+    margin-bottom:26px;
+  }
+  .hero h1{font-size:clamp(32px,7vw,56px);max-width:820px;margin:0 auto 20px}
+  .hero h1 .grad{
+    background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero p.sub{font-size:clamp(16px,2.4vw,19px);color:var(--ink-muted);max-width:560px;margin:0 auto 34px}
+  .hero .ctas{display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;margin:0 auto 14px}
+  .hero .micro{font-size:13px;color:var(--ink-faint)}
+  .rocket-float{
+    position:relative;width:120px;margin:40px auto 0;
+    animation:float 5s ease-in-out infinite;
+  }
+  @keyframes float{
+    0%,100%{transform:translateY(0) rotate(0deg)}
+    50%{transform:translateY(-14px) rotate(-2deg)}
+  }
+
+  /* ---------- Cards / grids ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--card-border);
+    border-radius:var(--radius);padding:26px;
+  }
+  .grid{display:grid;gap:18px;grid-template-columns:1fr}
+  .pain-list{display:grid;gap:12px;margin-top:8px}
+  .pain-list li{
+    display:flex;gap:12px;align-items:flex-start;
+    background:var(--card);border:1px solid rgba(255,255,255,0.06);
+    border-radius:12px;padding:16px 18px;font-size:15px;color:var(--ink-muted);
+  }
+  .pain-list li .dot{
+    flex:0 0 auto;width:8px;height:8px;border-radius:50%;
+    background:var(--gradient);margin-top:7px;
+  }
+
+  /* ---------- Split / pillar sections ---------- */
+  .pillar{padding:64px 0}
+  .pillar-inner{display:grid;gap:32px;align-items:center}
+  .pillar-tag{
+    display:inline-block;font-size:12px;font-weight:700;letter-spacing:0.1em;
+    text-transform:uppercase;padding:6px 14px;border-radius:999px;
+    background:rgba(168,85,247,0.12);color:var(--purple);border:1px solid rgba(168,85,247,0.3);
+    margin-bottom:16px;
+  }
+  .pillar h2{font-size:clamp(24px,4.5vw,32px);margin-bottom:14px}
+  .pillar p{color:var(--ink-muted);margin-bottom:18px}
+  .feature-check{display:grid;gap:10px;margin:20px 0}
+  .feature-check li{display:flex;gap:10px;align-items:center;font-size:14px;color:var(--ink-muted)}
+  .feature-check svg{flex:0 0 auto;color:var(--pink)}
+  .channel-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+  .channel-chips .chip{
+    font-size:12px;font-weight:600;color:var(--ink-muted);
+    background:rgba(168,85,247,0.10);border:1px solid rgba(168,85,247,0.28);
+    border-radius:999px;padding:6px 12px;
+  }
+
+  /* Mock dashboard visual (monitoring platform) */
+  .mock-dash{
+    background:linear-gradient(160deg, rgba(168,85,247,0.10), rgba(6,5,16,0.4));
+    border:1px solid var(--card-border);border-radius:20px;padding:20px;
+  }
+  .mock-dash .row{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .mock-stat{
+    flex:1 1 100px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);
+    border-radius:10px;padding:12px 14px;
+  }
+  .mock-stat .label{font-size:11px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em}
+  .mock-stat .value{font-family:'Space Grotesk';font-size:18px;color:var(--ink);margin-top:4px}
+  .mock-stat .value.ok{color:#4ade80}
+  .mock-chart{background:rgba(255,255,255,0.02);border-radius:10px;padding:14px;border:1px solid rgba(255,255,255,0.06)}
+  .mock-chart svg{width:100%;height:auto;display:block}
+  .mock-log{margin-top:12px;font-size:12px;color:var(--ink-faint);font-family:ui-monospace,monospace;background:rgba(0,0,0,0.25);border-radius:8px;padding:10px 12px;border:1px solid rgba(255,255,255,0.05)}
+  .mock-log span{color:var(--pink)}
+
+  /* ---------- Benefits ---------- */
+  .benefits-grid{display:grid;gap:16px;grid-template-columns:1fr}
+  .benefit-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px}
+  .benefit-card .icon{
+    width:38px;height:38px;border-radius:10px;background:var(--gradient);
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#0a0612;font-weight:700;
+  }
+  .benefit-card h3{font-size:16px;margin-bottom:8px}
+  .benefit-card p{font-size:14px;color:var(--ink-muted)}
+
+  /* ---------- Proof ---------- */
+  .stat-bar{
+    display:grid;gap:16px;grid-template-columns:1fr;
+    background:var(--card);border:1px solid var(--card-border);
+    border-radius:var(--radius);padding:26px;margin-bottom:32px;text-align:center;
+  }
+  .stat-bar .num{font-family:'Space Grotesk';font-size:26px;color:var(--ink)}
+  .stat-bar .lbl{font-size:12px;color:var(--ink-faint);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+  .testimonials{display:grid;gap:16px;grid-template-columns:1fr}
+  .testi{
+    background:var(--card);border:1px dashed rgba(168,85,247,0.35);
+    border-radius:var(--radius);padding:22px;font-size:14px;color:var(--ink-faint);
+  }
+  .testi strong{display:block;color:var(--ink-muted);font-size:13px;margin-top:10px}
+
+  /* ---------- Offer ---------- */
+  .offer-card{
+    background:linear-gradient(160deg, rgba(168,85,247,0.14), rgba(6,5,16,0.5));
+    border:1px solid var(--card-border);border-radius:20px;padding:32px;max-width:560px;margin:0 auto;
+  }
+  .offer-card ul{display:grid;gap:12px;margin:22px 0}
+  .offer-card li{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:var(--ink-muted)}
+  .offer-card li svg{flex:0 0 auto;color:var(--pink);margin-top:2px}
+  .offer-price{
+    border-top:1px solid rgba(168,85,247,0.25);padding-top:18px;margin-top:6px;
+    font-size:14px;color:var(--ink-faint);
+  }
+  .offer-note{font-size:13px;color:var(--ink-faint);margin-top:14px}
+
+  .banner{
+    border-radius:var(--radius);padding:26px 24px;text-align:center;
+    border:1px solid var(--card-border);
+  }
+  .banner.guarantee{background:rgba(74,222,128,0.06);border-color:rgba(74,222,128,0.25)}
+  .banner.urgency{background:rgba(232,121,249,0.06);border-color:rgba(232,121,249,0.3)}
+  .banner p{color:var(--ink-muted);font-size:15px;max-width:520px;margin:0 auto}
+  .banner .tag{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;display:block}
+  .banner.guarantee .tag{color:#4ade80}
+  .banner.urgency .tag{color:var(--pink)}
+
+  /* ---------- Accordions ---------- */
+  details{
+    background:var(--card);border:1px solid rgba(255,255,255,0.07);
+    border-radius:12px;padding:16px 18px;margin-bottom:10px;
+  }
+  summary{
+    cursor:pointer;font-weight:600;color:var(--ink);font-size:15px;
+    list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  }
+  summary::-webkit-details-marker{display:none}
+  summary::after{content:"+";font-size:20px;color:var(--pink);flex:0 0 auto}
+  details[open] summary::after{content:"–"}
+  details p{margin-top:12px;font-size:14px;color:var(--ink-muted)}
+
+  /* ---------- Final CTA / contact ---------- */
+  .cta-final{
+    text-align:center;border-radius:24px;padding:56px 24px;
+    background:radial-gradient(circle at 50% 0%, rgba(168,85,247,0.25), transparent 60%), var(--bg-alt);
+    border:1px solid var(--card-border);
+  }
+  .cta-final h2{font-size:clamp(24px,5vw,34px);max-width:600px;margin:0 auto 16px}
+  .cta-final p{color:var(--ink-muted);max-width:500px;margin:0 auto 28px}
+
+  .contact-form{
+    max-width:560px;margin:40px auto 0;display:grid;gap:14px;text-align:left;
+  }
+  .contact-form label{font-size:13px;color:var(--ink-muted);margin-bottom:6px;display:block}
+  .contact-form input,.contact-form select,.contact-form textarea{
+    width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);
+    border-radius:10px;padding:12px 14px;color:var(--ink);font-size:14px;font-family:inherit;
+  }
+  .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{
+    outline:none;border-color:var(--purple);
+  }
+  .contact-form textarea{resize:vertical;min-height:90px}
+  .form-row{display:grid;gap:14px}
+  .form-note{font-size:12px;color:var(--ink-faint);margin-top:8px}
+
+  footer{padding:48px 0 28px;border-top:1px solid rgba(168,85,247,0.15)}
+  .footer-grid{display:grid;gap:28px;margin-bottom:32px}
+  footer .logo img{height:24px;margin-bottom:12px}
+  footer .ps{font-size:14px;color:var(--ink-muted);max-width:460px}
+  footer .col h4{font-size:13px;color:var(--ink);margin-bottom:12px}
+  footer .col ul{display:grid;gap:8px}
+  footer .col a{font-size:13px;color:var(--ink-faint)}
+  footer .col a:hover{color:var(--ink-muted)}
+  .footer-bottom{
+    display:flex;flex-direction:column;gap:10px;
+    padding-top:20px;border-top:1px solid rgba(255,255,255,0.06);
+    font-size:12px;color:var(--ink-faint);
+  }
+
+  @media(min-width:720px){
+    nav .links{display:flex}
+    .navtoggle{display:none}
+    .hero .ctas{flex-direction:row;justify-content:center}
+    .grid.cols-2{grid-template-columns:1fr 1fr}
+    .grid.cols-3{grid-template-columns:repeat(3,1fr)}
+    .pillar-inner{grid-template-columns:1fr 1fr}
+    .pillar-inner.reverse .content{order:2}
+    .pillar-inner.reverse .visual{order:1}
+    .benefits-grid{grid-template-columns:repeat(3,1fr)}
+    .testimonials{grid-template-columns:repeat(3,1fr)}
+    .stat-bar{grid-template-columns:repeat(3,1fr)}
+    .form-row.two{grid-template-columns:1fr 1fr}
+    .footer-grid{grid-template-columns:1.4fr 1fr 1fr 1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+<div class="stars layer2"></div>
+<div class="twinkle-layer" id="twinkleLayer"></div>
+<div class="shooting-stars">
+  <div class="shooting-star s1"></div>
+  <div class="shooting-star s2"></div>
+  <div class="shooting-star s3"></div>
+</div>
+<div class="nebula">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+
+<header>
+  <nav>
+    <a href="#topo" class="logo"><img src="assets/logo-horizontal-white.png" alt="Tuning Tech"></a>
+    <div class="links">
+      <a href="#consultoria">Consultoria</a>
+      <a href="#backup">Backup</a>
+      <a href="#monitoramento">Monitoramento</a>
+      <a href="#provas">Depoimentos</a>
+      <a href="#contato" class="btn btn-primary">Falar com Especialista</a>
+    </div>
+    <button class="navtoggle" id="navtoggle" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobile-links" id="mobileLinks">
+    <a href="#consultoria">Consultoria</a>
+    <a href="#backup">Backup</a>
+    <a href="#monitoramento">Monitoramento</a>
+    <a href="#provas">Depoimentos</a>
+    <a href="#contato">Falar com Especialista</a>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="hero" id="topo">
+    <div class="wrap">
+      <span class="badge">🚀 Consultoria + Monitoramento de Dados</span>
+      <h1>Seu <span class="grad">Ambiente de Dados</span> Está Voando às Cegas?</h1>
+      <p class="sub">Monitoramento, backup e sustentação para MySQL, PostgreSQL, MongoDB e Percona Server, cuidados por especialistas todos os dias.</p>
+      <div class="ctas">
+        <a href="#contato" class="btn btn-primary">Falar com um Especialista</a>
+        <a href="#contato" class="btn btn-ghost">Quero um Diagnóstico Gratuito</a>
+      </div>
+      <p class="micro">Sem compromisso • Resposta em até 24h</p>
+    </div>
+  </section>
+
+  <!-- DOR -->
+  <section id="dor">
+    <div class="wrap">
+      <span class="eyebrow">O problema</span>
+      <h2 class="section-title">Se algum desses cenários já bateu à sua porta...</h2>
+      <p class="section-lede">Um banco de dados fora do ar não é erro técnico. É receita parada, cliente irritado e confiança perdida em tempo real.</p>
+      <ul class="pain-list">
+        <li><span class="dot"></span>O alerta chegou às 3h da manhã e ninguém do time viu a tempo.</li>
+        <li><span class="dot"></span>O backup que "deveria estar funcionando", até o dia em que alguém precisou restaurar e descobriu que não.</li>
+        <li><span class="dot"></span>Uma mudança de configuração quebrou algo em produção, e ninguém sabe quem mexeu ou quando.</li>
+        <li><span class="dot"></span>Cada banco de dados (MySQL, Postgres, Mongo) exige um especialista diferente, e vocês não têm nenhum de sobra.</li>
+        <li><span class="dot"></span>Contratar um DBA sênior custa caro, e ainda assim é só uma pessoa cobrindo tudo.</li>
+        <li><span class="dot"></span>A ferramenta de monitoramento dispara alerta, mas ninguém tem tempo ou profundidade técnica pra agir antes do incidente.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- CONSULTORIA (pillar 1) -->
+  <section class="pillar" id="consultoria">
+    <div class="wrap">
+      <div class="pillar-inner">
+        <div class="content">
+          <span class="pillar-tag">Oferta principal</span>
+          <h2>Consultoria & Sustentação de Ambientes</h2>
+          <p>A Tuning Tech é o time de dados que sua empresa não precisa contratar internamente. Instalação, configuração, backup, monitoramento e análise de performance para MySQL, PostgreSQL, MongoDB e Percona Server, geridos por especialistas em cada tecnologia, não por um DBA genérico tentando dar conta de tudo.</p>
+          <ul class="feature-check">
+            <li>✓ Instalação e configuração de ambientes</li>
+            <li>✓ Gestão e validação de backups</li>
+            <li>✓ Monitoramento contínuo multi-banco</li>
+            <li>✓ Análise e otimização de performance</li>
+          </ul>
+          <a href="#contato" class="btn btn-primary">Solicitar Diagnóstico Gratuito</a>
+        </div>
+        <div class="visual">
+          <div class="card">
+            <div class="mock-stat" style="margin-bottom:12px">
+              <div class="label">Bancos suportados</div>
+              <div class="value">MySQL · PostgreSQL · MongoDB · Percona</div>
+            </div>
+            <div class="mock-stat" style="margin-bottom:12px">
+              <div class="label">Modelo de atendimento</div>
+              <div class="value">Consultoria contínua + sustentação 24/7</div>
+            </div>
+            <div class="mock-stat">
+              <div class="label">Investimento</div>
+              <div class="value">Sob consulta, após diagnóstico</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MONITORAMENTO (pillar 2 / produto à parte) -->
+  <section class="pillar" id="monitoramento" style="background:var(--bg-alt)">
+    <div class="wrap">
+      <div class="pillar-inner reverse">
+        <div class="content">
+          <span class="pillar-tag">TT Monitor · Incluso em todo contrato</span>
+          <h2>Conheça o TT Monitor</h2>
+          <p>TT Monitor é a plataforma própria de observabilidade da Tuning Tech: dashboards em tempo real, monitoramento de host e serviços, e rastreamento completo de mudanças no ambiente. Os alertas chegam 24 horas por dia, na plataforma que seu time já usa.</p>
+          <ul class="feature-check">
+            <li>✓ Gráficos e métricas em tempo real</li>
+            <li>✓ Monitoramento de host e serviços 24h</li>
+            <li>✓ Histórico de mudanças de DDL</li>
+            <li>✓ Rastreamento de configuração: ajuste de variáveis e versionamento de my.cnf</li>
+            <li>✓ Alertas configuráveis por canal e por criticidade</li>
+          </ul>
+          <div class="channel-chips">
+            <span class="chip">Discord</span>
+            <span class="chip">Google Chat</span>
+            <span class="chip">Telegram</span>
+            <span class="chip">Slack</span>
+            <span class="chip">E-mail</span>
+            <span class="chip">SMS</span>
+          </div>
+          <a href="#contato" class="btn btn-ghost">Conhecer o TT Monitor</a>
+        </div>
+        <div class="visual">
+          <div class="mock-dash">
+            <div class="row">
+              <div class="mock-stat"><div class="label">Host</div><div class="value ok">Online</div></div>
+              <div class="mock-stat"><div class="label">CPU</div><div class="value">38%</div></div>
+              <div class="mock-stat"><div class="label">Conexões</div><div class="value">214</div></div>
+            </div>
+            <div class="mock-chart">
+              <svg viewBox="0 0 300 90" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#e879f9" stop-opacity="0.5"/>
+                    <stop offset="100%" stop-color="#e879f9" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <path d="M0,60 L30,50 L60,58 L90,32 L120,40 L150,20 L180,30 L210,18 L240,26 L270,14 L300,22 L300,90 L0,90 Z" fill="url(#chartGrad)"/>
+                <path d="M0,60 L30,50 L60,58 L90,32 L120,40 L150,20 L180,30 L210,18 L240,26 L270,14 L300,22" fill="none" stroke="#e879f9" stroke-width="2"/>
+              </svg>
+            </div>
+            <div class="mock-log"><span>[DDL]</span> ALTER TABLE pedidos ADD COLUMN status_pagamento, detectado às 14:32</div>
+            <div class="mock-log" style="margin-top:8px"><span>[CONFIG]</span> my.cnf: innodb_buffer_pool_size alterado de 4G para 8G, versionado às 09:15</div>
+            <div class="mock-log" style="margin-top:8px"><span>[ALERTA]</span> Enviado para Slack e Telegram em 12s</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BACKUP -->
+  <section class="pillar" id="backup">
+    <div class="wrap">
+      <div class="pillar-inner">
+        <div class="content">
+          <span class="pillar-tag">Proteção de dados</span>
+          <h2>Backup Gerenciado & Recuperação</h2>
+          <p>Backup configurado, testado e monitorado, não só agendado. A gente garante que, se um dia vocês precisarem restaurar, o backup vai estar lá funcionando.</p>
+          <ul class="feature-check">
+            <li>✓ Backup automatizado diário (full e incremental)</li>
+            <li>✓ Testes periódicos de restauração</li>
+            <li>✓ Retenção configurável por política de negócio</li>
+            <li>✓ Cópias local e off-site</li>
+            <li>✓ Alerta imediato em caso de falha</li>
+          </ul>
+          <a href="#contato" class="btn btn-primary">Solicitar Diagnóstico Gratuito</a>
+        </div>
+        <div class="visual">
+          <div class="mock-dash">
+            <div class="row">
+              <div class="mock-stat"><div class="label">Último backup</div><div class="value ok">Sucesso</div></div>
+              <div class="mock-stat"><div class="label">Retenção</div><div class="value">30 dias</div></div>
+              <div class="mock-stat"><div class="label">Espaço usado</div><div class="value">64%</div></div>
+            </div>
+            <div class="mock-log"><span>[BACKUP]</span> full_db_producao.sql.gz, concluído às 03:00, validado com sucesso</div>
+            <div class="mock-log" style="margin-top:8px"><span>[TESTE]</span> Restauração simulada: íntegra, sem falhas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFÍCIOS -->
+  <section id="beneficios">
+    <div class="wrap">
+      <span class="eyebrow">Por que Tuning Tech</span>
+      <h2 class="section-title">O que muda no seu dia a dia</h2>
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="icon">01</div>
+          <h3>Monitoramento 24/7 multi-banco</h3>
+          <p>Você é avisado antes do problema virar incidente, não depois.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="icon">02</div>
+          <h3>Backup gerenciado por especialistas</h3>
+          <p>Durma tranquilo sabendo que seus dados podem ser recuperados a qualquer momento.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="icon">03</div>
+          <h3>Histórico de config e DDL</h3>
+          <p>Saiba exatamente o que mudou no ambiente e quando, sem depender de ninguém lembrar.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="icon">04</div>
+          <h3>Um único parceiro multi-banco</h3>
+          <p>MySQL, PostgreSQL, MongoDB e Percona cuidados pela mesma equipe.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="icon">05</div>
+          <h3>Performance contínua</h3>
+          <p>Identifique gargalos antes que afetem a experiência do seu cliente.</p>
+        </div>
+        <div class="benefit-card">
+          <div class="icon">06</div>
+          <h3>Diagnóstico inicial gratuito</h3>
+          <p>Descubra o estado real do seu ambiente sem gastar nada.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROVA SOCIAL -->
+  <section id="provas">
+    <div class="wrap">
+      <span class="eyebrow">Prova social</span>
+      <h2 class="section-title">Números que já entregamos</h2>
+      <div class="stat-bar">
+        <div><div class="num">60+</div><div class="lbl">Ambientes monitorados</div></div>
+        <div><div class="num">10 min</div><div class="lbl">SLA médio de resposta</div></div>
+        <div><div class="num">1 ano</div><div class="lbl">De mercado</div></div>
+      </div>
+      <div class="testimonials">
+        <div class="testi">"[Inserir depoimento: cliente que evitou perda de dados ou downtime específico]"<strong>Nome, cargo na Empresa</strong></div>
+        <div class="testi">"[Inserir depoimento: cliente que trocou DBA interno ou freelancer pela Tuning Tech]"<strong>Nome, cargo na Empresa</strong></div>
+        <div class="testi">"[Inserir depoimento: cliente sobre o TT Monitor]"<strong>Nome, cargo na Empresa</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTA -->
+  <section id="oferta">
+    <div class="wrap">
+      <span class="eyebrow center" style="display:block;text-align:center">A oferta</span>
+      <h2 class="section-title center">O que está incluso</h2>
+      <div class="offer-card">
+        <ul>
+          <li>✓ Diagnóstico completo do seu ambiente de dados</li>
+          <li>✓ Monitoramento 24/7 (MySQL, PostgreSQL, MongoDB, Percona)</li>
+          <li>✓ Gestão e validação de backups</li>
+          <li>✓ Análise contínua de performance</li>
+          <li>✓ Acesso ao TT Monitor, com alertas 24h em Discord, Google Chat, Telegram, Slack, e-mail ou SMS</li>
+          <li>✓ Rastreamento de mudanças de configuração e DDL</li>
+        </ul>
+        <div class="offer-price">Valor: sob consulta, definido após diagnóstico do seu ambiente.</div>
+        <a href="#contato" class="btn btn-primary btn-block" style="margin-top:20px">Solicitar Diagnóstico Gratuito</a>
+        <p class="offer-note">Cada ambiente é diferente, por isso o plano é desenhado depois que conhecemos sua infraestrutura, não antes.</p>
+      </div>
+
+      <div class="grid cols-2" style="margin-top:32px">
+        <div class="banner guarantee">
+          <span class="tag">Sem risco</span>
+          <p>Você recebe um raio-x real do seu ambiente sem pagar nada e sem compromisso. Se fizer sentido, seguimos juntos.</p>
+        </div>
+        <div class="banner urgency">
+          <span class="tag">Cada dia conta</span>
+          <p>Cada dia sem monitoramento é um dia em que um problema pode estar se formando sem ninguém ver.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBJEÇÕES -->
+  <section id="objecoes">
+    <div class="wrap">
+      <span class="eyebrow">Dúvidas comuns</span>
+      <h2 class="section-title">Antes de você perguntar</h2>
+      <details>
+        <summary>Já tenho alguém cuidando disso...</summary>
+        <p>Ótimo, a Tuning Tech pode reforçar seu time atual, não substituir. Muitas empresas usam a gente como camada extra de monitoramento e resposta fora do horário comercial.</p>
+      </details>
+      <details>
+        <summary>Isso deve ser caro...</summary>
+        <p>O diagnóstico é gratuito e sem compromisso. Você só sabe o investimento real depois de ver exatamente o que faz sentido pro seu ambiente. Geralmente sai mais barato que contratar um DBA sênior fixo.</p>
+      </details>
+      <details>
+        <summary>Meu ambiente é pequeno, ainda não preciso disso...</summary>
+        <p>Backup mal configurado e falta de monitoramento custam caro justamente quando o ambiente cresce rápido. Quanto antes isso é estruturado, menor o risco lá na frente.</p>
+      </details>
+      <details>
+        <summary>Não confio em terceiros no meu banco de produção...</summary>
+        <p>Entendemos: é o coração do seu negócio. Por isso trabalhamos com acessos controlados, transparência total sobre o que é feito e você define os limites de acesso.</p>
+      </details>
+      <details>
+        <summary>Já uso uma ferramenta de monitoramento...</summary>
+        <p>Ferramenta sem gente olhando o alerta às 3h da manhã só avisa que o problema aconteceu. A Tuning Tech une tecnologia própria com um time que responde de verdade.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- CTA FINAL + CONTATO -->
+  <section id="contato">
+    <div class="wrap">
+      <div class="cta-final">
+        <img class="rocket-float" src="assets/icon-rocket.png" alt="" style="width:64px;margin:0 auto 24px">
+        <h2>Seu banco de dados sustenta o seu negócio inteiro.</h2>
+        <p>A Tuning Tech cuida do ambiente pra que o problema nunca chegue até você. Preencha o formulário e receba seu diagnóstico gratuito.</p>
+
+        <form class="contact-form" action="mailto:contato@tuningtech.com.br" method="get" enctype="text/plain">
+          <div class="form-row two">
+            <div>
+              <label for="nome">Nome</label>
+              <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+              <label for="empresa">Empresa</label>
+              <input type="text" id="empresa" name="empresa" required>
+            </div>
+          </div>
+          <div class="form-row two">
+            <div>
+              <label for="email">E-mail</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            <div>
+              <label for="telefone">Telefone / WhatsApp</label>
+              <input type="tel" id="telefone" name="telefone">
+            </div>
+          </div>
+          <div>
+            <label for="bancos">Quais bancos de dados você usa?</label>
+            <select id="bancos" name="bancos">
+              <option>MySQL</option>
+              <option>PostgreSQL</option>
+              <option>MongoDB</option>
+              <option>Percona Server</option>
+              <option>Mais de um</option>
+            </select>
+          </div>
+          <div>
+            <label for="mensagem">Conte um pouco sobre seu ambiente</label>
+            <textarea id="mensagem" name="mensagem" placeholder="Ex: temos 3 servidores MySQL em produção, sem monitoramento hoje..."></textarea>
+          </div>
+          <label style="display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--ink-faint)">
+            <input type="checkbox" required style="width:auto;margin-top:3px">
+            Concordo com a Política de Privacidade e o tratamento dos meus dados conforme a LGPD.
+          </label>
+          <button type="submit" class="btn btn-primary btn-block">Solicitar Diagnóstico Gratuito</button>
+          <p class="form-note">Sem compromisso • Resposta em até 24h</p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#topo" class="logo"><img src="assets/logo-horizontal-white.png" alt="Tuning Tech"></a>
+        <p class="ps">Você não precisa esperar um incidente acontecer pra saber se o seu ambiente de dados está seguro. O diagnóstico é gratuito e mostra exatamente onde estão os riscos antes que virem problema.</p>
+      </div>
+      <div class="col">
+        <h4>Serviços</h4>
+        <ul>
+          <li><a href="#consultoria">Consultoria & Sustentação</a></li>
+          <li><a href="#backup">Backup Gerenciado</a></li>
+          <li><a href="#monitoramento">TT Monitor</a></li>
+          <li><a href="#oferta">O que está incluso</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Empresa</h4>
+        <ul>
+          <li><a href="#provas">Depoimentos</a></li>
+          <li><a href="#contato">Fale conosco</a></li>
+        </ul>
+      </div>
+      <div class="col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="mailto:contato@tuningtech.com.br">contato@tuningtech.com.br</a></li>
+          <li><a href="#contato">Diagnóstico gratuito</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Tuning Tech. Todos os direitos reservados.</span>
+      <span>Ao se inscrever, você concorda com nossa Política de Privacidade e com o tratamento dos seus dados conforme a LGPD.</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const toggle = document.getElementById('navtoggle');
+  const mobileLinks = document.getElementById('mobileLinks');
+  toggle.addEventListener('click', () => mobileLinks.classList.toggle('open'));
+  mobileLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileLinks.classList.remove('open')));
+
+  const twinkleLayer = document.getElementById('twinkleLayer');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (twinkleLayer && !prefersReducedMotion) {
+    const total = 35;
+    for (let i = 0; i < total; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'twinkle';
+      const size = (Math.random() * 1.6 + 0.6).toFixed(1);
+      dot.style.width = size + 'px';
+      dot.style.height = size + 'px';
+      dot.style.top = (Math.random() * 100).toFixed(2) + '%';
+      dot.style.left = (Math.random() * 100).toFixed(2) + '%';
+      dot.style.animationDuration = (Math.random() * 3 + 2).toFixed(2) + 's';
+      dot.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
+      twinkleLayer.appendChild(dot);
+    }
+  }
+</script>
+
+</body>
+</html>

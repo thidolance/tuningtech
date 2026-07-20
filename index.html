@@ -285,6 +285,15 @@
   /* ---------- Benefits ---------- */
   .benefits-grid{display:grid;gap:16px;grid-template-columns:1fr}
   .benefit-card{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:22px}
+  /* Efeito de brilho nos cards (hover) */
+  .card,.benefit-card,.testi,.mock-dash,.pain-list li{
+    transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+  }
+  .card:hover,.benefit-card:hover,.testi:hover,.mock-dash:hover,.pain-list li:hover{
+    transform:translateY(-4px);
+    border-color:rgba(232,121,249,0.55);
+    box-shadow:0 12px 30px -10px rgba(168,85,247,0.4), 0 0 26px -6px rgba(232,121,249,0.45);
+  }
   .benefit-card .icon{
     width:38px;height:38px;border-radius:10px;background:var(--gradient);
     display:flex;align-items:center;justify-content:center;margin-bottom:14px;color:#0a0612;font-weight:700;
@@ -366,6 +375,25 @@
   .contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{
     outline:none;border-color:var(--purple);
   }
+  /* Select com borda em gradiente + fundo preto */
+  .contact-form .select-wrap{
+    position:relative;border-radius:10px;padding:1.5px;
+    background:var(--gradient);
+    box-shadow:0 0 10px rgba(168,85,247,0.25);
+  }
+  .contact-form .select-wrap::after{
+    content:"";position:absolute;right:16px;top:calc(50% - 3px);
+    width:8px;height:8px;border-right:2px solid var(--pink);border-bottom:2px solid var(--pink);
+    transform:translateY(-50%) rotate(45deg);pointer-events:none;
+  }
+  .contact-form select{
+    appearance:none;-webkit-appearance:none;-moz-appearance:none;
+    width:100%;background:#060510;color:var(--ink);
+    border:none;border-radius:9px;padding:13px 42px 13px 14px;
+    font-size:14px;font-family:inherit;cursor:pointer;
+  }
+  .contact-form select:focus{outline:none}
+  .contact-form select option{background:#0b0818;color:var(--ink)}
   .contact-form textarea{resize:vertical;min-height:90px}
   .form-row{display:grid;gap:14px}
   .form-note{font-size:12px;color:var(--ink-faint);margin-top:8px}
@@ -754,14 +782,16 @@
           </div>
           <div>
             <label for="bancos">Quais bancos de dados você usa?</label>
-            <select id="bancos" name="bancos">
-              <option>MySQL</option>
-              <option>PostgreSQL</option>
-              <option>SQL Server</option>
-              <option>MongoDB</option>
-              <option>Percona Server</option>
-              <option>Mais de um</option>
-            </select>
+            <div class="select-wrap">
+              <select id="bancos" name="bancos">
+                <option>MySQL</option>
+                <option>PostgreSQL</option>
+                <option>SQL Server</option>
+                <option>MongoDB</option>
+                <option>Percona Server</option>
+                <option>Mais de um</option>
+              </select>
+            </div>
           </div>
           <div>
             <label for="mensagem">Conte um pouco sobre seu ambiente</label>

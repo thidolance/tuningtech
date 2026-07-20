@@ -111,7 +111,29 @@
   .mobile-links a{padding:14px 20px;font-size:15px;color:var(--ink-muted);border-bottom:1px solid rgba(255,255,255,0.04)}
 
   /* ---------- Hero ---------- */
-  .hero{padding:64px 0 40px;text-align:center}
+  .hero{padding:64px 0 40px;text-align:center;overflow:hidden}
+  .hero .wrap{position:relative;z-index:1}
+  /* Glow Horizon: arco de luz que surge no topo do hero */
+  .glow-horizon{
+    position:absolute;top:0;left:50%;transform:translateX(-50%);
+    width:200%;max-width:1600px;height:440px;
+    pointer-events:none;z-index:0;isolation:isolate;overflow:hidden;
+    animation:ghRise 2s cubic-bezier(0.16,1,0.3,1) both;
+  }
+  .glow-horizon .arc{position:absolute;left:-10%;width:120%;border-radius:50%}
+  /* camadas (de trás pra frente): preto (profundidade), índigo, roxo, linha branca */
+  .glow-horizon .arc.black {height:900px;top:-760px;background:#000;filter:blur(51px);animation:ghArc 2s cubic-bezier(0.16,1,0.3,1) both}
+  .glow-horizon .arc.indigo{height:900px;top:-752px;background:#4922E5;filter:blur(28px);opacity:.85;animation:ghArc 2s cubic-bezier(0.16,1,0.3,1) .0s both}
+  .glow-horizon .arc.purple{height:900px;top:-748px;background:#A558FB;filter:blur(34px);opacity:.8;animation:ghArc 2s cubic-bezier(0.16,1,0.3,1) .6s both}
+  .glow-horizon .arc.white {height:900px;top:-742px;background:#0b0818;box-shadow:0 -4px 26px 2px rgba(255,255,255,0.7);animation:ghArc 2s cubic-bezier(0.16,1,0.3,1) 1.2s both}
+  @keyframes ghRise{
+    from{transform:translateX(-50%) translateY(-70px) scaleY(1.5);opacity:0;filter:blur(15px)}
+    to{transform:translateX(-50%) translateY(0) scaleY(1);opacity:1;filter:blur(0)}
+  }
+  @keyframes ghArc{from{transform:translateY(40px)}to{transform:translateY(0)}}
+  @media (prefers-reduced-motion: reduce){
+    .glow-horizon,.glow-horizon .arc{animation:none}
+  }
   .hero .badge{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--card-border);padding:7px 16px;border-radius:999px;font-size:13px;color:var(--ink-muted);margin-bottom:26px}
   .hero h1{font-size:clamp(32px,7vw,56px);max-width:860px;margin:0 auto 20px}
   .hero h1 .grad{background:var(--gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -285,6 +307,12 @@
 
   <!-- HERO -->
   <section class="hero" id="topo">
+    <div class="glow-horizon" aria-hidden="true">
+      <div class="arc black"></div>
+      <div class="arc indigo"></div>
+      <div class="arc purple"></div>
+      <div class="arc white"></div>
+    </div>
     <div class="wrap">
       <span class="badge">🛰️ TT Monitor · Produto Tuning Tech</span>
       <h1>Todo o seu ambiente de dados. <span class="grad">Em um único lugar.</span></h1>

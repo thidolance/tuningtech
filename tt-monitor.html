@@ -126,13 +126,21 @@
   /* What it monitors */
   .monitor-grid{display:grid;gap:18px;grid-template-columns:1fr}
   .mcard{background:var(--card);border:1px solid var(--card-border);border-radius:var(--radius);padding:26px}
-  /* Efeito de brilho nos cards (hover) */
-  .card,.mcard,.mock-dash{transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease}
+  /* Efeito de brilho nos cards (hover + glow que segue o mouse na borda) */
+  .card,.mcard,.mock-dash{position:relative;isolation:isolate;transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease}
   .card:hover,.mcard:hover,.mock-dash:hover{
     transform:translateY(-4px);
-    border-color:rgba(232,121,249,0.55);
     box-shadow:0 12px 30px -10px rgba(168,85,247,0.4), 0 0 26px -6px rgba(232,121,249,0.45);
   }
+  .card::after,.mcard::after,.mock-dash::after{
+    content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;
+    background:radial-gradient(160px circle at var(--mx,-999px) var(--my,-999px),
+      rgba(232,121,249,0.95), rgba(168,85,247,0.55) 25%, transparent 60%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;
+    opacity:0;transition:opacity .3s ease;pointer-events:none;z-index:2;
+  }
+  .card:hover::after,.mcard:hover::after,.mock-dash:hover::after{opacity:1}
   .mcard .icon{width:44px;height:44px;border-radius:12px;background:var(--gradient);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:#0a0612}
   .mcard h3{font-size:19px;margin-bottom:10px}
   .mcard p{font-size:14px;color:var(--ink-muted);margin-bottom:14px}
@@ -581,6 +589,15 @@
       twinkleLayer.appendChild(dot);
     }
   }
+
+  // Glow que segue o mouse na borda dos cards
+  document.querySelectorAll('.card,.mcard,.mock-dash').forEach(el => {
+    el.addEventListener('pointermove', e => {
+      const r = el.getBoundingClientRect();
+      el.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      el.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
 </script>
 
 </body>
